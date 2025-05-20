@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrículas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Tabela de Matrículas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Instituição</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Estudante</th>
+                <th scope="col">Data de Início</th>
+                <th scope="col">Previsão de Término</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for matricula in matriculas %}
+            <tr>
+                <td>{{ matricula.instituicao }}</td>
+                <td>{{ matricula.curso }}</td>
+                <td>{{ matricula.pessoa }}</td>
+                <td>{{ matricula.data_inicio }}</td>
+                <td>{{ matricula.data_previsao_termino }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

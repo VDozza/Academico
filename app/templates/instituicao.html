@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituições de Ensino</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Tabela de Instituições de Ensino</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Site</th>
+                <th scope="col">Telefone</th>
+                <th scope="col">Cidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for instituicao in instituicoes %}
+            <tr>
+                <td>{{ instituicao.nome }}</td>
+                <td>{{ instituicao.site }}</td>
+                <td>{{ instituicao.telefone }}</td>
+                <td>{{ instituicao.cidade }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
