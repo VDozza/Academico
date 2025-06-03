@@ -21,6 +21,23 @@ class Ocupacao(models.Model):
         verbose_name = "Ocupação"
         verbose_name_plural = "Ocupações"
 
+class Pessoa(models.Model):
+    nome = models.CharField(max_length=100, verbose_name="Nome")
+    pai = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nome do pai")
+    mae = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nome da mãe")
+    cpf = models.CharField(max_length=11, unique=True, verbose_name="CPF")
+    data_nasc = models.DateField(verbose_name="Data de nascimento")
+    email = models.EmailField(unique=True, verbose_name="Email")
+    cidade = models.ForeignKey(Cidade, on_delete=models.SET_NULL, null=True, verbose_name="Cidade")
+    ocupacao = models.ForeignKey(Ocupacao, on_delete=models.CASCADE, verbose_name="Ocupação")
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Pessoa"
+        verbose_name_plural = "Pessoas"
+
 class InstituicaoEnsino(models.Model):
     nome = models.CharField(max_length=100, verbose_name="Nome da instituição")
     site = models.URLField(blank=True, null=True, verbose_name="Site da instituição")
@@ -34,6 +51,19 @@ class InstituicaoEnsino(models.Model):
         verbose_name = "Instituição de Ensino"
         verbose_name_plural = "Instituições de Ensino"
 
+class Curso(models.Model):
+    nome = models.CharField(max_length=100, verbose_name="Nome do curso")
+    carga_horaria_total = models.IntegerField(verbose_name="Carga horária total")
+    duracao_meses = models.IntegerField(verbose_name="Duração em meses")
+    instituicao = models.ForeignKey(InstituicaoEnsino, on_delete=models.CASCADE, verbose_name="Instituição de ensino")
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Curso"
+        verbose_name_plural = "Cursos"
+
 class AreaSaber(models.Model):
     nome = models.CharField(max_length=100, verbose_name="Nome da área do saber")
 
@@ -44,19 +74,13 @@ class AreaSaber(models.Model):
         verbose_name = "Área do saber"
         verbose_name_plural = "Áreas do saber"
 
-class Curso(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do curso")
-    carga_horaria_total = models.IntegerField(verbose_name="Carga horária total")
-    duracao_meses = models.IntegerField(verbose_name="Duração em meses")
+class CursoArea(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso")
     area_saber = models.ForeignKey(AreaSaber, on_delete=models.CASCADE, verbose_name="Área do saber")
-    instituicao = models.ForeignKey(InstituicaoEnsino, on_delete=models.CASCADE, verbose_name="Instituição de ensino")
-
-    def __str__(self):
-        return self.nome
 
     class Meta:
-        verbose_name = "Curso"
-        verbose_name_plural = "Cursos"
+        verbose_name = "Relação Curso-Área"
+        verbose_name_plural = "Relações Curso-Área"
 
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100, verbose_name="Nome da disciplina")
@@ -68,23 +92,6 @@ class Disciplina(models.Model):
     class Meta:
         verbose_name = "Disciplina"
         verbose_name_plural = "Disciplinas"
-
-class Pessoa(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome")
-    pai = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nome do pai")
-    mae = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nome da mãe")
-    cpf = models.CharField(max_length=11, unique=True, verbose_name="CPF")
-    data_nasc = models.DateField(verbose_name="Data de nascimento")
-    email = models.EmailField(unique=True, verbose_name="Email")
-    cidade = models.ForeignKey(Cidade, on_delete=models.SET_NULL, null=True, verbose_name="Cidade")
-    ocupacao = models.ForeignKey(Ocupacao, on_delete=models.SET_NULL, null=True, verbose_name="Ocupação")
-
-    def __str__(self):
-        return self.nome
-
-    class Meta:
-        verbose_name = "Pessoa"
-        verbose_name_plural = "Pessoas"
 
 class Matricula(models.Model):
     instituicao = models.ForeignKey(InstituicaoEnsino, on_delete=models.CASCADE, verbose_name="Instituição de ensino")
@@ -136,4 +143,31 @@ class Turno(models.Model):
     class Meta:
         verbose_name = "Turno"
         verbose_name_plural = "Turnos"
+class Turma(models.Model):
+    nome = models.CharField(max_length=100, verbose_name="Nome da turma")
 
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Turma"
+        verbose_name_plural = "Turmas"
+class Ocorrencia(models.Model):
+    descricao = models.TextField(verbose_name="Descrição da ocorrência")
+    data = models.DateField(verbose_name="Data da ocorrência")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso")
+    disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE, verbose_name="Disciplina")
+    pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, verbose_name="Pessoa envolvida")
+
+    class Meta:
+        verbose_name = "Ocorrência"
+        verbose_name_plural = "Ocorrências"
+class CursoDisciplina(models.Model):
+    disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE, verbose_name="Disciplina")
+    carga_horaria = models.IntegerField(verbose_name="Carga horária da disciplina")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, verbose_name="Curso")
+    periodo = models.IntegerField(verbose_name="Período do curso")
+
+    class Meta:
+        verbose_name = "Curso-Disciplina"
+        verbose_name_plural = "Cursos-Disciplinas"
